@@ -22,12 +22,13 @@ def list_assignments(p):
 @teacher_assignments_resources.route('/assignments/grade', methods=['POST'], strict_slashes=False)
 @decorators.accept_payload
 @decorators.auth_principal
-def upsert_assignment(p, incoming_payload):
+def grade_assignment(p, incoming_payload):
     """Edit an assignment"""
     assignment_grade_payload = GradeAssignment().load(incoming_payload)
     graded_assignment = Assignment.grade_assignment(
         _id=assignment_grade_payload.id,
-        principal=p
+        principal= p,
+        grade = assignment_grade_payload.grade
     )
         
     db.session.commit()

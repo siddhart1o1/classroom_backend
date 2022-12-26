@@ -75,12 +75,13 @@ class Assignment(db.Model):
 
 
     @classmethod
-    def grade_assignment(cls, _id,  principal: Principal):
+    def grade_assignment(cls, _id,  principal: Principal,grade : GradeEnum):
         assignment = Assignment.get_by_id(_id)
         assertions.assert_found(assignment, 'No assignment with this id was found')
         assertions.assert_valid(assignment.teacher_id == principal.teacher_id, 'This assignment belongs to some other teacher')
         assertions.assert_valid(assignment.state == AssignmentStateEnum.SUBMITTED, 'only a submitted assignment can be graded')
         assignment.state = AssignmentStateEnum.GRADED
+        assignment.grade = grade
         db.session.flush()
 
         return assignment
